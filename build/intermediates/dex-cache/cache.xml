@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/pre-dexed/debug/classes-e53ddb9f4fe14e41060f2a70c4757d1db8e4e607.jar" />
+    </item>
+    <item
+        jar="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="d96886efea7cc74fbb3abd0e3b51d5638fc57be0">
+        <dex dex="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/pre-dexed/debug/classes-eccc1766a1cc829d7bb8c436c446e163cbe54842.jar" />
+    </item>
+    <item
+        jar="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/pre-dexed/debug/classes-828c06f56a2e44ab3272cb4638bcddda429b1af3.jar" />
+    </item>
+    <item
+        jar="/Users/jackpro15/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-e0da581fc4fb5fc5c233024186d5ede26741edf7.jar" />
+    </item>
+    <item
+        jar="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/support-v13/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="076c7d9e22cc325b8008ff799e0c06dfb8eefdf3">
+        <dex dex="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-eb59118c58fcc81ca01ebb6d56feca3ab2f5f715.jar" />
+    </item>
+    <item
+        jar="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-453b8e03034a6861dffdc59756433b74ed8ddb2a.jar" />
+    </item>
+    <item
+        jar="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/exploded-aar/com.android.support/support-v13/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="1a57337a520bf40b9ad1e074cb780527dffa1aac">
+        <dex dex="/Users/jackpro15/Desktop/Camera2Basic/Application/build/intermediates/pre-dexed/debug/classes-8f42be8ad21272be8b0ff092e9f20a2400f7401e.jar" />
+    </item>
+
+</items>
