@@ -1729,7 +1729,7 @@ containing a value of this type.
         public static final int icon=0x7f0b0029;
         public static final int ifRoom=0x7f0b001d;
         public static final int image=0x7f0b0026;
-        public static final int info=0x7f0b0052;
+        public static final int info=0x7f0b0051;
         public static final int line1=0x7f0b0058;
         public static final int line3=0x7f0b005c;
         public static final int listMode=0x7f0b0009;
@@ -1741,7 +1741,7 @@ containing a value of this type.
         public static final int none=0x7f0b000e;
         public static final int normal=0x7f0b000a;
         public static final int parentPanel=0x7f0b002b;
-        public static final int picture=0x7f0b0051;
+        public static final int picture=0x7f0b0050;
         public static final int progress_circular=0x7f0b0005;
         public static final int progress_horizontal=0x7f0b0006;
         public static final int radio=0x7f0b0038;
@@ -1774,7 +1774,7 @@ containing a value of this type.
         public static final int textSpacerNoButtons=0x7f0b0031;
         public static final int texture=0x7f0b004e;
         public static final int time=0x7f0b0059;
-        public static final int timestamp=0x7f0b0050;
+        public static final int timestamp=0x7f0b0052;
         public static final int title=0x7f0b002a;
         public static final int title_template=0x7f0b002d;
         public static final int topPanel=0x7f0b002c;
