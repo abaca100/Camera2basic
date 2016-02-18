@@ -32,7 +32,6 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
-import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -49,7 +48,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.BoolRes;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
@@ -175,14 +173,21 @@ public class Camera2BasicFragment extends Fragment
 
     };
 
-    private class PreviewDataTask extends AsyncTask<Long, Void, Boolean> {
+    private class PreviewDataTask extends AsyncTask<Long, String, Void> {
 
         private String str;
+        private long lastTime = 0;
 
-        protected Boolean doInBackground(Long... timestamp) {
+        @Override
+        protected Void doInBackground(Long... timestamp) {
             str = analysis(timestamp);
+            publishProgress(str);
+            return null;
+        }
 
-            return true;
+        @Override
+        protected void onProgressUpdate(String... progresss) {
+            mTimestamp.setText(progresss[0]);
         }
     }
 
@@ -192,20 +197,16 @@ public class Camera2BasicFragment extends Fragment
         if (b == null)
             return "";
 
-//        int w = b.getWidth();
-//        int h = b.getHeight();
-        int s = (b.getWidth() / 2) - 160;
-        int e = (b.getHeight() / 2) - 120;
-        int w = 320 + s;
-        int h = 240 + e;
+        int w = b.getWidth();
+        int h = b.getHeight();
 
         int redColors = 0;
         int greenColors = 0;
         int blueColors = 0;
         int pixelCount = 0;
 
-        for (int x=s; x<w; x++) {
-            for (int y=e; y<h; y++) {
+        for (int x=0; x<w; x++) {
+            for (int y=0; y<h; y++) {
                 int pixel = b.getPixel(x, y);
                 pixelCount++;
                 redColors += (pixel >> 16) & 0xff;
@@ -219,7 +220,7 @@ public class Camera2BasicFragment extends Fragment
         int blue = (blueColors/pixelCount);
         String ss = "R="+red+",G="+green+",B="+blue;
 
-        Log.i(TAG, "\t\t" + sdf.format(new Date(timestamp[0])) + "@" + (w-s) + "x" + (h-e) + "=" + ss);
+        Log.i(TAG, "\t" + sdf.format(new Date(timestamp[0])) + "@" + w + "x" + h + "=" + ss);
 
         return ss;
     }
