@@ -19,10 +19,17 @@
 
     <com.example.android.camera2basic.AutoFitTextureView
         android:id="@+id/texture"
-        android:layout_width="160dp"
-        android:layout_height="120dp"
+        android:layout_width="320px"
+        android:layout_height="240px"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="150dip"
+        android:layout_below="@+id/timestamp"
+        android:background="@color/abc_search_url_text_normal" />
 
     <FrameLayout
         android:id="@+id/control"
@@ -64,4 +71,4 @@
         android:textSize="20dp" />
 
 </RelativeLayout>
-<!-- From: file:/Users/abaca/Documents/Camera2basic/Application/src/main/res/layout/fragment_camera2_basic.xml -->
+<!-- From: file:/Users/jackpro15/Desktop/Camera2Basic/Application/src/main/res/layout/fragment_camera2_basic.xml -->

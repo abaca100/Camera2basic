@@ -59,6 +59,10 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:38:17
 	android:name
 		ADDED from AndroidManifest.xml:38:27
+activity#com.example.android.camera2basic.ChartsActivity
+ADDED from AndroidManifest.xml:41:9
+	android:name
+		ADDED from AndroidManifest.xml:41:19
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:support-v4:23.1.0:20:5

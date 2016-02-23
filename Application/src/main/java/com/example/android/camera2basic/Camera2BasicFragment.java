@@ -48,6 +48,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
@@ -62,6 +63,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -75,9 +80,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Camera2BasicFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+
+    // for Charts
+    private final Handler mHandler = new Handler();
+    private Runnable mTimer;
+    private LineGraphSeries<DataPoint> mSeries;
+    private static int lastValue = 0;
+    private static final AtomicBoolean processing = new AtomicBoolean(false);
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -134,6 +147,10 @@ public class Camera2BasicFragment extends Fragment
      */
     private static final int MAX_PREVIEW_HEIGHT = 1080;
 
+    private static final long FUBON_DO_RECORDING = 3000;
+    private static final long FUBON_DO_DISPLAY = 1000;
+    private static final long FUBON_DO_NOTHING = 0;
+
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
      * {@link TextureView}.
@@ -141,11 +158,13 @@ public class Camera2BasicFragment extends Fragment
     private final TextureView.SurfaceTextureListener mSurfaceTextureListener
             = new TextureView.SurfaceTextureListener() {
 
-        private long timestamp=0;
+        private long timestamp = SystemClock.currentThreadTimeMillis();
+        private long show_time = SystemClock.currentThreadTimeMillis();
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
             openCamera(width, height);
+            mHandler.postDelayed(mTimer, FUBON_DO_DISPLAY);
         }
 
         @Override
@@ -159,16 +178,23 @@ public class Camera2BasicFragment extends Fragment
         }
 
         @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture texture) {
-            /*
-            Log.i(TAG, "Time Gap = "+(System.currentTimeMillis()-timestamp));
-            timestamp=System.currentTimeMillis();
-            Log.i(TAG, "Gap=" + (texture.getTimestamp()-timestamp));
-            timestamp = texture.getTimestamp();
-            */
-            //analysis();
-            //Log.i(TAG, sdf.format(new Date(System.currentTimeMillis())));
-            new PreviewDataTask().execute(System.currentTimeMillis());
+        public void onSurfaceTextureUpdated(SurfaceTexture texture)
+        {
+            long gap = System.currentTimeMillis() - timestamp;
+            long st = System.currentTimeMillis() - show_time;
+            if (gap >= FUBON_DO_RECORDING) {
+                Log.v(TAG, "\t\tgap");
+                // 每 3 秒鐘記錄一次
+                timestamp = System.currentTimeMillis();
+                new PreviewDataTask().execute(System.currentTimeMillis(), gap);
+            } else if (st >= FUBON_DO_DISPLAY) {
+                Log.v(TAG, "\t\tshow");
+                // 每 1 秒鐘顯示在畫面
+                show_time = System.currentTimeMillis();
+                new PreviewDataTask().execute(System.currentTimeMillis(), FUBON_DO_DISPLAY);
+            } else {
+                new PreviewDataTask().execute(System.currentTimeMillis(), FUBON_DO_NOTHING);
+            }
         }
 
     };
@@ -176,22 +202,35 @@ public class Camera2BasicFragment extends Fragment
     private class PreviewDataTask extends AsyncTask<Long, String, Void> {
 
         private String str;
-        private long lastTime = 0;
 
         @Override
         protected Void doInBackground(Long... timestamp) {
-            str = analysis(timestamp);
-            publishProgress(str);
+            str = analysis(timestamp[0]);
+
+            long gap = timestamp[1];
+            if (gap == FUBON_DO_DISPLAY) {
+                publishProgress(str);
+            }
             return null;
         }
 
         @Override
         protected void onProgressUpdate(String... progresss) {
             mTimestamp.setText(progresss[0]);
+            String s1[] = progresss[0].split(",");
+            String s2[] = s1[0].split("=");
+            try {
+                int endPoint = Integer.valueOf(s2[1]);
+                //endPoint = (int)(255/endPoint);
+                mSeries.appendData(new DataPoint(lastValue, endPoint), false, 255);
+                lastValue++;
+            } catch(ArrayIndexOutOfBoundsException e) {
+                Log.e(TAG, progresss[0]);
+            }
         }
     }
 
-    private String analysis(Long[] timestamp) {
+    private String analysis(long timestamp) {
         Bitmap b = mTextureView.getBitmap();
 
         if (b == null)
@@ -220,7 +259,7 @@ public class Camera2BasicFragment extends Fragment
         int blue = (blueColors/pixelCount);
         String ss = "R="+red+",G="+green+",B="+blue;
 
-        Log.i(TAG, "\t" + sdf.format(new Date(timestamp[0])) + "@" + w + "x" + h + "=" + ss);
+        Log.v(TAG, "\t" + sdf.format(new Date(timestamp)) + "@" + w + "x" + h + "=" + ss);
 
         return ss;
     }
@@ -495,6 +534,14 @@ public class Camera2BasicFragment extends Fragment
         view.findViewById(R.id.info).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mTimestamp = (TextView) view.findViewById(R.id.timestamp);
+
+        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        mSeries = new LineGraphSeries<DataPoint>();
+        Log.i(TAG, "color=" + mSeries.getColor());
+        graph.addSeries(mSeries);
+//        graph.getViewport().setXAxisBoundsManual(true);
+//        graph.getViewport().setMinX(0);
+//        graph.getViewport().setMaxX(255);
     }
 
     @Override
@@ -523,6 +570,7 @@ public class Camera2BasicFragment extends Fragment
     public void onPause() {
         closeCamera();
         stopBackgroundThread();
+        mHandler.removeCallbacks(mTimer);
         super.onPause();
     }
 
